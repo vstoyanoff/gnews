@@ -1,0 +1,25 @@
+version: '2.1'
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    command: ./bin/api-dev
+    volumes:
+      - './api:/home/gnews/code:delegated'
+    ports:
+      - 9000:8000
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    command: yarn start
+    volumes:
+      - './web:/home/gnews/code:delegated'
+      - '/home/gnews/code/node_modules'
+    ports:
+      - 8000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - api
